@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>StreamVault · Cuentas Premium de Streaming</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Favicon emoji -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- ══════════════ PRELOADER ══════════════ -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-content">
+      <div class="preloader-logo">⚡</div>
+      <div class="preloader-bar"><div class="preloader-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ CURSOR GLOW (desktop only) ══════════════ -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- ══════════════ NAVBAR ══════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">Stream<span class="logo-accent">Vault</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#inicio" class="nav-link active">Inicio</a></li>
+        <li><a href="#planes" class="nav-link">Planes</a></li>
+        <li><a href="#calculadora" class="nav-link">Ahorro</a></li>
+        <li><a href="#beneficios" class="nav-link">Beneficios</a></li>
+        <li><a href="#testimonios" class="nav-link">Testimonios</a></li>
+        <li><a href="#faq" class="nav-link">FAQ</a></li>
+        <li><a href="admin.html" class="nav-link" style="color: #c4b5fd; font-weight: 600;">🔒 Admin</a></li>
+      </ul>
+      <div class="nav-actions" id="navActions">
+        <button class="btn-ghost" onclick="openModal('login')">Iniciar Sesión</button>
+        <button class="btn-primary" onclick="openModal('register')">Registrarse</button>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══════════════ MOBILE MENU (fullscreen) ══════════════ -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul class="mobile-nav-links">
+      <li><a href="#inicio" class="mobile-link">Inicio</a></li>
+      <li><a href="#planes" class="mobile-link">Planes</a></li>
+      <li><a href="#calculadora" class="mobile-link">Calculadora de Ahorro</a></li>
+      <li><a href="#beneficios" class="mobile-link">Beneficios</a></li>
+      <li><a href="#testimonios" class="mobile-link">Testimonios</a></li>
+      <li><a href="#faq" class="mobile-link">FAQ</a></li>
+      <li><a href="admin.html" class="mobile-link" style="color: #a78bfa; font-size: 1.1rem;">🔒 Panel Admin</a></li>
+      <li class="mobile-actions" id="mobileActions">
+        <button class="btn-ghost btn-block" onclick="openModal('login')">Iniciar Sesión</button>
+        <button class="btn-primary btn-block" onclick="openModal('register')">Registrarse</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ══════════════ HERO SECTION ══════════════ -->
+  <section class="hero" id="inicio">
+    <div class="hero-bg">
+      <div class="grid-lines"></div>
+      <div class="floating-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge reveal">
+        <span class="badge-dot"></span>
+        Cuentas 100% Verificadas · Entrega Inmediata
+      </div>
+      <h1 class="hero-title reveal">
+        Todo tu <span class="gradient-text">streaming</span><br>
+        en un solo lugar
+      </h1>
+      <p class="hero-subtitle reveal">
+        Accede a Netflix, Prime Video, HBO Max, Spotify y Disney+ a precios increíbles. Cuentas premium, soporte 24/7 y renovación garantizada.
+      </p>
+      <div class="hero-cta reveal">
+        <a href="#planes" class="btn-primary btn-lg">
+          Ver Planes
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="https://wa.me/573001234567?text=Hola%20StreamVault!%20Quiero%20información%20sobre%20las%20cuentas" class="btn-whatsapp-hero btn-lg" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+      </div>
+
+      <div class="hero-platforms reveal">
+        <div class="platform-float" style="--delay: 0s">
+          <img src="https://img.icons8.com/color/96/netflix.png" alt="Netflix" class="platform-icon-img">
+        </div>
+        <div class="platform-float" style="--delay: 0.15s">
+          <img src="https://img.icons8.com/color/96/amazon-prime-video.png" alt="Prime Video" class="platform-icon-img">
+        </div>
+        <div class="platform-float" style="--delay: 0.3s">
+          <img src="https://img.icons8.com/color/96/hbo-max.png" alt="HBO Max" class="platform-icon-img">
+        </div>
+        <div class="platform-float" style="--delay: 0.45s">
+          <img src="https://img.icons8.com/color/96/spotify.png" alt="Spotify" class="platform-icon-img">
+        </div>
+        <div class="platform-float" style="--delay: 0.6s">
+          <img src="https://img.icons8.com/color/96/disney-plus.png" alt="Disney+" class="platform-icon-img">
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-indicator reveal">
+      <div class="scroll-mouse"><div class="scroll-dot"></div></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ══════════════ MARQUEE TRUST BAR ══════════════ -->
+  <div class="trust-marquee">
+    <div class="marquee-track">
+      <span>⚡ Entrega en menos de 5 minutos</span>
+      <span>🛡️ Garantía de reemplazo</span>
+      <span>💬 Soporte 24/7 por WhatsApp</span>
+      <span>🔒 Pago seguro por Nequi</span>
+      <span>⭐ +15,000 clientes satisfechos</span>
+      <span>✅ Cuentas 100% verificadas</span>
+      <span>⚡ Entrega en menos de 5 minutos</span>
+      <span>🛡️ Garantía de reemplazo</span>
+      <span>💬 Soporte 24/7 por WhatsApp</span>
+      <span>🔒 Pago seguro por Nequi</span>
+      <span>⭐ +15,000 clientes satisfechos</span>
+      <span>✅ Cuentas 100% verificadas</span>
+    </div>
+  </div>
+
+  <!-- ══════════════ STATS BAR ══════════════ -->
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item reveal">
+          <span class="stat-number" data-target="15000">0</span>
+          <span class="stat-label">Clientes Activos</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item reveal">
+          <span class="stat-number" data-target="99">0</span><span class="stat-suffix">%</span>
+          <span class="stat-label">Satisfacción</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item reveal">
+          <span class="stat-number" data-target="24">0</span><span class="stat-suffix">/7</span>
+          <span class="stat-label">Soporte</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item reveal">
+          <span class="stat-number" data-target="5">0</span>
+          <span class="stat-label">Plataformas</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ COMO FUNCIONA ══════════════ -->
+  <section class="section how-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Simple y Rápido</span>
+        <h2 class="section-title">¿Cómo <span class="gradient-text">funciona</span>?</h2>
+      </div>
+      <div class="steps-timeline">
+        <div class="step-card reveal">
+          <div class="step-number-circle">1</div>
+          <div class="step-content">
+            <h4>Elige tu plan</h4>
+            <p>Selecciona la plataforma y el periodo que prefieras de nuestro catálogo.</p>
+          </div>
+        </div>
+        <div class="step-card reveal">
+          <div class="step-number-circle">2</div>
+          <div class="step-content">
+            <h4>Paga por Nequi</h4>
+            <p>Realiza el pago al número de Nequi o escanea el código QR que aparece en el carrito.</p>
+          </div>
+        </div>
+        <div class="step-card reveal">
+          <div class="step-number-circle">3</div>
+          <div class="step-content">
+            <h4>Envía el comprobante</h4>
+            <p>Manda la captura del pago por WhatsApp con tu nombre y el plan que compraste.</p>
+          </div>
+        </div>
+        <div class="step-card reveal">
+          <div class="step-number-circle">4</div>
+          <div class="step-content">
+            <h4>¡Recibe tu cuenta!</h4>
+            <p>Te enviamos el <strong>correo y contraseña</strong> de tu cuenta premium al instante por WhatsApp.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ PLANES / PRICING ══════════════ -->
+  <section class="section planes-section" id="planes">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Nuestros Planes</span>
+        <h2 class="section-title">Elige tu plataforma <span class="gradient-text">favorita</span></h2>
+        <p class="section-desc">Todos los planes incluyen entrega inmediata, garantía de renovación y soporte prioritario.</p>
+      </div>
+
+      <!-- Period toggle -->
+      <div class="period-toggle reveal">
+        <button class="period-btn active" data-period="mensual">1 Mes</button>
+        <button class="period-btn" data-period="trimestral">3 Meses <span class="save-badge">🔥 Ahorro Extra</span></button>
+        <button class="period-btn" data-period="anual">6 Meses <span class="save-badge">💎 Máximo Ahorro</span></button>
+      </div>
+
+      <!-- Cards Grid -->
+      <div class="plans-grid">
+
+        <!-- NETFLIX -->
+        <div class="plan-card reveal" data-platform="netflix">
+          <div class="card-glow netflix-glow"></div>
+          <div class="card-header">
+            <div class="platform-badge netflix">
+              <img src="https://img.icons8.com/color/48/netflix.png" alt="Netflix">
+            </div>
+            <div class="card-tag">Ahorras hasta 67%</div>
+          </div>
+          <h3 class="card-platform-name">Netflix</h3>
+          <p class="card-desc">Cuenta Premium 4K Ultra HD · Perfil privado con pin</p>
+
+          <div class="price-container">
+            <div class="price-option active" data-period="mensual">
+              <div class="official-price-tag">Oficial: <del>$44.900</del> <span class="savings-pill">-60%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$18.000</span>
+                <span class="price-period">COP/mes</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $26.900 COP</div>
+            </div>
+            <div class="price-option" data-period="trimestral">
+              <div class="official-price-tag">Oficial: <del>$134.700</del> <span class="savings-pill">-64%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$48.000</span>
+                <span class="price-period">COP/3 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $86.700 COP</div>
+            </div>
+            <div class="price-option" data-period="anual">
+              <div class="official-price-tag">Oficial: <del>$269.400</del> <span class="savings-pill">-67%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$90.000</span>
+                <span class="price-period">COP/6 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $179.400 COP</div>
+            </div>
+          </div>
+
+          <ul class="card-features">
+            <li><span class="check">✓</span> 4K Ultra HD + HDR</li>
+            <li><span class="check">✓</span> Perfil con Pin Personal</li>
+            <li><span class="check">✓</span> Renovación Garantizada</li>
+            <li><span class="check">✓</span> Entrega en 5 minutos</li>
+          </ul>
+          <button class="btn-card netflix-btn" onclick="handleBuy('Netflix Premium 4K', getCurrentPrice(this))">
+            <span>Comprar Ahora</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <!-- PRIME VIDEO -->
+        <div class="plan-card reveal" data-platform="prime">
+          <div class="card-glow prime-glow"></div>
+          <div class="card-header">
+            <div class="platform-badge prime">
+              <img src="https://img.icons8.com/color/48/amazon-prime-video.png" alt="Prime Video">
+            </div>
+            <div class="card-tag">Ahorras hasta 67%</div>
+          </div>
+          <h3 class="card-platform-name">Prime Video</h3>
+          <p class="card-desc">Acceso a películas, series y producciones originales Amazon</p>
+
+          <div class="price-container">
+            <div class="price-option active" data-period="mensual">
+              <div class="official-price-tag">Oficial: <del>$24.900</del> <span class="savings-pill">-52%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$12.000</span>
+                <span class="price-period">COP/mes</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $12.900 COP</div>
+            </div>
+            <div class="price-option" data-period="trimestral">
+              <div class="official-price-tag">Oficial: <del>$74.700</del> <span class="savings-pill">-60%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$30.000</span>
+                <span class="price-period">COP/3 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $44.700 COP</div>
+            </div>
+            <div class="price-option" data-period="anual">
+              <div class="official-price-tag">Oficial: <del>$149.400</del> <span class="savings-pill">-67%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$50.000</span>
+                <span class="price-period">COP/6 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $99.400 COP</div>
+            </div>
+          </div>
+
+          <ul class="card-features">
+            <li><span class="check">✓</span> Calidad 4K UHD</li>
+            <li><span class="check">✓</span> Perfil individual</li>
+            <li><span class="check">✓</span> Todo el catálogo Amazon</li>
+            <li><span class="check">✓</span> Soporte continuo 24/7</li>
+          </ul>
+          <button class="btn-card prime-btn" onclick="handleBuy('Prime Video', getCurrentPrice(this))">
+            <span>Comprar Ahora</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <!-- HBO MAX -->
+        <div class="plan-card reveal" data-platform="hbo">
+          <div class="card-glow hbo-glow"></div>
+          <div class="card-header">
+            <div class="platform-badge hbo">
+              <img src="https://img.icons8.com/color/48/hbo-max.png" alt="HBO Max">
+            </div>
+            <div class="card-tag hot">🔥 Ahorras hasta 76%</div>
+          </div>
+          <h3 class="card-platform-name">Max (HBO Platino)</h3>
+          <p class="card-desc">Series HBO, Warner Bros, Discovery y estrenos exclusivos</p>
+
+          <div class="price-container">
+            <div class="price-option active" data-period="mensual">
+              <div class="official-price-tag">Oficial: <del>$40.900</del> <span class="savings-pill">-66%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$14.000</span>
+                <span class="price-period">COP/mes</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $26.900 COP</div>
+            </div>
+            <div class="price-option" data-period="trimestral">
+              <div class="official-price-tag">Oficial: <del>$122.700</del> <span class="savings-pill">-71%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$35.000</span>
+                <span class="price-period">COP/3 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $87.700 COP</div>
+            </div>
+            <div class="price-option" data-period="anual">
+              <div class="official-price-tag">Oficial: <del>$245.400</del> <span class="savings-pill">-76%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$60.000</span>
+                <span class="price-period">COP/6 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $185.400 COP</div>
+            </div>
+          </div>
+
+          <ul class="card-features">
+            <li><span class="check">✓</span> 4K Ultra HD + Dolby Atmos</li>
+            <li><span class="check">✓</span> Sin anuncios ni pausas</li>
+            <li><span class="check">✓</span> Estrenos simultáneos</li>
+            <li><span class="check">✓</span> Garantía de reemplazo</li>
+          </ul>
+          <button class="btn-card hbo-btn" onclick="handleBuy('Max HBO Platino 4K', getCurrentPrice(this))">
+            <span>Comprar Ahora</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <!-- DISNEY+ -->
+        <div class="plan-card featured reveal" data-platform="disney">
+          <div class="featured-badge">⭐ Más vendido en Colombia</div>
+          <div class="card-glow disney-glow"></div>
+          <div class="card-header">
+            <div class="platform-badge disney">
+              <img src="https://img.icons8.com/color/48/disney-plus.png" alt="Disney+">
+            </div>
+            <div class="card-tag best">Ahorras hasta 77%</div>
+          </div>
+          <h3 class="card-platform-name">Disney+ Premium</h3>
+          <p class="card-desc">Incluye ESPN en vivo, Disney, Pixar, Marvel y Star</p>
+
+          <div class="price-container">
+            <div class="price-option active" data-period="mensual">
+              <div class="official-price-tag">Oficial: <del>$49.900</del> <span class="savings-pill">-68%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$16.000</span>
+                <span class="price-period">COP/mes</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $33.900 COP</div>
+            </div>
+            <div class="price-option" data-period="trimestral">
+              <div class="official-price-tag">Oficial: <del>$149.700</del> <span class="savings-pill">-73%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$40.000</span>
+                <span class="price-period">COP/3 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $109.700 COP</div>
+            </div>
+            <div class="price-option" data-period="anual">
+              <div class="official-price-tag">Oficial: <del>$299.400</del> <span class="savings-pill">-77%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$70.000</span>
+                <span class="price-period">COP/6 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $229.400 COP</div>
+            </div>
+          </div>
+
+          <ul class="card-features">
+            <li><span class="check">✓</span> 4K UHD + Deportes ESPN</li>
+            <li><span class="check">✓</span> Perfil propio con Pin</li>
+            <li><span class="check">✓</span> Descargas ilimitadas</li>
+            <li><span class="check">✓</span> Activación al instante</li>
+          </ul>
+          <button class="btn-card disney-btn" onclick="handleBuy('Disney+ Premium 4K', getCurrentPrice(this))">
+            <span>Comprar Ahora</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <!-- SPOTIFY -->
+        <div class="plan-card reveal" data-platform="spotify">
+          <div class="card-glow spotify-glow"></div>
+          <div class="card-header">
+            <div class="platform-badge spotify">
+              <img src="https://img.icons8.com/color/48/spotify.png" alt="Spotify">
+            </div>
+            <div class="card-tag">Ahorras hasta 53%</div>
+          </div>
+          <h3 class="card-platform-name">Spotify Premium</h3>
+          <p class="card-desc">Música sin anuncios, descargas offline y audio de máxima fidelidad</p>
+
+          <div class="price-container">
+            <div class="price-option active" data-period="mensual">
+              <div class="official-price-tag">Oficial: <del>$16.900</del> <span class="savings-pill">-41%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$10.000</span>
+                <span class="price-period">COP/mes</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $6.900 COP</div>
+            </div>
+            <div class="price-option" data-period="trimestral">
+              <div class="official-price-tag">Oficial: <del>$50.700</del> <span class="savings-pill">-49%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$26.000</span>
+                <span class="price-period">COP/3 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $24.700 COP</div>
+            </div>
+            <div class="price-option" data-period="anual">
+              <div class="official-price-tag">Oficial: <del>$101.400</del> <span class="savings-pill">-53%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$48.000</span>
+                <span class="price-period">COP/6 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $53.400 COP</div>
+            </div>
+          </div>
+
+          <ul class="card-features">
+            <li><span class="check">✓</span> Cero Anuncios</li>
+            <li><span class="check">✓</span> Descarga para escuchar sin internet</li>
+            <li><span class="check">✓</span> Audio en Alta Calidad (320kbps)</li>
+            <li><span class="check">✓</span> En tu propia cuenta o nueva</li>
+          </ul>
+          <button class="btn-card spotify-btn" onclick="handleBuy('Spotify Premium', getCurrentPrice(this))">
+            <span>Comprar Ahora</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <!-- YOUTUBE PREMIUM -->
+        <div class="plan-card reveal" data-platform="youtube">
+          <div class="card-glow youtube-glow"></div>
+          <div class="card-header">
+            <div class="platform-badge" style="background: rgba(255, 0, 0, 0.1);">
+              <img src="https://img.icons8.com/color/48/youtube-play.png" alt="YouTube">
+            </div>
+            <div class="card-tag">Ahorras hasta 43%</div>
+          </div>
+          <h3 class="card-platform-name">YouTube Premium</h3>
+          <p class="card-desc">Videos sin publicidad + YouTube Music en segundo plano</p>
+
+          <div class="price-container">
+            <div class="price-option active" data-period="mensual">
+              <div class="official-price-tag">Oficial: <del>$20.900</del> <span class="savings-pill">-43%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$12.000</span>
+                <span class="price-period">COP/mes</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $8.900 COP</div>
+            </div>
+            <div class="price-option" data-period="trimestral">
+              <div class="official-price-tag">Oficial: <del>$62.700</del> <span class="savings-pill">-39%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$38.000</span>
+                <span class="price-period">COP/3 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $24.700 COP</div>
+            </div>
+            <div class="price-option" data-period="anual">
+              <div class="official-price-tag">Oficial: <del>$125.400</del> <span class="savings-pill">-43%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$72.000</span>
+                <span class="price-period">COP/6 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $53.400 COP</div>
+            </div>
+          </div>
+
+          <ul class="card-features">
+            <li><span class="check">✓</span> Cero Publicidad en videos</li>
+            <li><span class="check">✓</span> YouTube Music HQ incluido</li>
+            <li><span class="check">✓</span> Reproducción con pantalla apagada</li>
+            <li><span class="check">✓</span> Activación rápida</li>
+          </ul>
+          <button class="btn-card youtube-btn" onclick="handleBuy('YouTube Premium', getCurrentPrice(this))">
+            <span>Comprar Ahora</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <!-- CHATGPT PLUS (IA) -->
+        <div class="plan-card featured reveal" data-platform="chatgpt">
+          <div class="featured-badge" style="background: linear-gradient(135deg, #10a37f, #2563eb);">🤖 IA Más Potente del Mundo</div>
+          <div class="card-glow chatgpt-glow"></div>
+          <div class="card-header">
+            <div class="platform-badge" style="background: rgba(16, 163, 127, 0.15);">
+              <img src="https://img.icons8.com/color/48/chatgpt.png" alt="ChatGPT">
+            </div>
+            <div class="card-tag" style="background: rgba(16, 163, 127, 0.2); color: #34d399; border-color: rgba(16, 163, 127, 0.3);">Ahorras hasta 68%</div>
+          </div>
+          <h3 class="card-platform-name">ChatGPT Plus</h3>
+          <p class="card-desc">Acceso a GPT-4o, generación de imágenes con DALL·E y análisis</p>
+
+          <div class="price-container">
+            <div class="price-option active" data-period="mensual">
+              <div class="official-price-tag">Oficial: <del>$85.000</del> <span class="savings-pill">-59%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$35.000</span>
+                <span class="price-period">COP/mes</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $50.000 COP</div>
+            </div>
+            <div class="price-option" data-period="trimestral">
+              <div class="official-price-tag">Oficial: <del>$255.000</del> <span class="savings-pill">-65%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$90.000</span>
+                <span class="price-period">COP/3 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $165.000 COP</div>
+            </div>
+            <div class="price-option" data-period="anual">
+              <div class="official-price-tag">Oficial: <del>$510.000</del> <span class="savings-pill">-68%</span></div>
+              <div style="display: flex; align-items: baseline; gap: 4px;">
+                <span class="price-amount">$165.000</span>
+                <span class="price-period">COP/6 meses</span>
+              </div>
+              <div class="pocket-savings">💰 Te ahorras $345.000 COP</div>
+            </div>
+          </div>
+
+          <ul class="card-features">
+            <li><span class="check">✓</span> GPT-4o sin límites estrictos</li>
+            <li><span class="check">✓</span> Generador de imágenes DALL·E 3</li>
+            <li><span class="check">✓</span> Modo de Voz Avanzado</li>
+            <li><span class="check">✓</span> Subida y análisis de PDFs/Excel</li>
+          </ul>
+          <button class="btn-card chatgpt-btn" onclick="handleBuy('ChatGPT Plus', getCurrentPrice(this))">
+            <span>Comprar Ahora</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- COMBOS -->
+      <div class="combos-section reveal">
+        <div class="section-header">
+          <span class="section-tag">🎁 Combos Especiales</span>
+          <h2 class="section-title">Ahorra más con nuestros <span class="gradient-text">paquetes</span></h2>
+        </div>
+        <div class="combos-grid">
+          <!-- COMBO 1: NETFLIX + SPOTIFY -->
+          <div class="combo-card reveal">
+            <div class="combo-glow"></div>
+            <div class="combo-icons">
+              <img src="https://img.icons8.com/color/40/netflix.png" alt="Netflix">
+              <span class="combo-plus">+</span>
+              <img src="https://img.icons8.com/color/40/spotify.png" alt="Spotify">
+            </div>
+            <h4>Netflix + Spotify</h4>
+            <div class="combo-price">
+              <span class="combo-old">Oficial: <del>$61.800</del></span>
+              <span class="combo-new">$24.000</span>
+              <span class="combo-period">COP/mes</span>
+            </div>
+            <span class="combo-save">Ahorras 61% (💰 $37.800 COP)</span>
+            <button class="btn-combo" onclick="handleBuy('Combo Netflix + Spotify', 24000)">Obtener Combo</button>
+          </div>
+
+          <!-- COMBO 2: TRIPLE ENTRETENIMIENTO -->
+          <div class="combo-card combo-featured reveal">
+            <div class="combo-glow"></div>
+            <div class="combo-badge">🔥 Más Vendido</div>
+            <div class="combo-icons">
+              <img src="https://img.icons8.com/color/40/netflix.png" alt="Netflix">
+              <span class="combo-plus">+</span>
+              <img src="https://img.icons8.com/color/40/disney-plus.png" alt="Disney+">
+              <span class="combo-plus">+</span>
+              <img src="https://img.icons8.com/color/40/hbo-max.png" alt="HBO">
+            </div>
+            <h4>Combo Triple (Netflix + Disney + HBO)</h4>
+            <div class="combo-price">
+              <span class="combo-old">Oficial: <del>$135.700</del></span>
+              <span class="combo-new">$42.000</span>
+              <span class="combo-period">COP/mes</span>
+            </div>
+            <span class="combo-save">Ahorras 69% (💰 $93.700 COP)</span>
+            <button class="btn-combo" onclick="handleBuy('Combo Triple (Netflix + Disney + HBO)', 42000)">Obtener Combo</button>
+          </div>
+
+          <!-- COMBO 3: PAQUETE TOTAL -->
+          <div class="combo-card reveal">
+            <div class="combo-glow"></div>
+            <div class="combo-icons">
+              <img src="https://img.icons8.com/color/32/netflix.png" alt="Netflix">
+              <span class="combo-plus">+</span>
+              <img src="https://img.icons8.com/color/32/amazon-prime-video.png" alt="Prime Video">
+              <span class="combo-plus">+</span>
+              <img src="https://img.icons8.com/color/32/hbo-max.png" alt="Max">
+              <span class="combo-plus">+</span>
+              <img src="https://img.icons8.com/color/32/spotify.png" alt="Spotify">
+              <span class="combo-plus">+</span>
+              <img src="https://img.icons8.com/color/32/disney-plus.png" alt="Disney">
+            </div>
+            <h4>Paquete Total · 5 en 1</h4>
+            <div class="combo-price">
+              <span class="combo-old">Oficial: <del>$177.500</del></span>
+              <span class="combo-new">$58.000</span>
+              <span class="combo-period">COP/mes</span>
+            </div>
+            <span class="combo-save">Ahorras 67% (💰 $119.500 COP)</span>
+            <button class="btn-combo" onclick="handleBuy('Paquete Total 5 en 1', 58000)">Obtener Combo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CALCULADORA INTERACTIVA DE AHORRO COLOMBIANO ══════════════ -->
+  <section class="section calc-section" id="calculadora">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">📊 Comparativa de Ahorro Real en Colombia</span>
+        <h2 class="section-title">¿Cuánto dinero te ahorras frente al <span class="gradient-text">precio oficial</span>?</h2>
+        <p class="section-subtitle">
+          Selecciona las plataformas que disfrutas y comprueba en vivo cuánto dinero dejas de gastar comprando con nosotros en Colombia.
+        </p>
+      </div>
+
+      <div class="calc-container reveal">
+        <div class="calc-grid">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+              <h3 style="font-size: 1.15rem; font-weight: 700;">1. Selecciona tus suscripciones:</h3>
+              
+              <!-- Selector de Duración en Calculadora -->
+              <div class="calc-period-toggle" style="display: flex; gap: 6px; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 12px; border: 1px solid var(--border-color);">
+                <button type="button" class="btn-calc-dur active" data-dur="1" onclick="setCalcDuration(1, this)" style="padding: 5px 12px; border-radius: 8px; border: none; font-size: 0.78rem; font-weight: 700; cursor: pointer; background: #7c3aed; color: white;">1 Mes</button>
+                <button type="button" class="btn-calc-dur" data-dur="3" onclick="setCalcDuration(3, this)" style="padding: 5px 12px; border-radius: 8px; border: none; font-size: 0.78rem; font-weight: 700; cursor: pointer; background: transparent; color: var(--text-secondary);">3 Meses 🔥</button>
+                <button type="button" class="btn-calc-dur" data-dur="6" onclick="setCalcDuration(6, this)" style="padding: 5px 12px; border-radius: 8px; border: none; font-size: 0.78rem; font-weight: 700; cursor: pointer; background: transparent; color: var(--text-secondary);">6 Meses (Top)</button>
+              </div>
+            </div>
+            
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">Precios en pesos colombianos (COP) vs tarifas directas oficiales:</p>
+
+            <div class="calc-platforms-grid" id="calcPlatformsGrid">
+              <!-- Plataforma 1: Netflix -->
+              <label class="calc-platform-card checked" onclick="toggleCalcCard(this)">
+                <input type="checkbox" value="netflix" checked onchange="updateSavingsCalculator()">
+                <img src="https://img.icons8.com/color/48/netflix.png" alt="Netflix" class="calc-platform-icon">
+                <div>
+                  <div class="calc-platform-title">Netflix Premium 4K</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Oficial: $44.900/m</div>
+                </div>
+              </label>
+
+              <!-- Plataforma 2: Prime Video -->
+              <label class="calc-platform-card checked" onclick="toggleCalcCard(this)">
+                <input type="checkbox" value="prime" checked onchange="updateSavingsCalculator()">
+                <img src="https://img.icons8.com/color/48/amazon-prime-video.png" alt="Prime Video" class="calc-platform-icon">
+                <div>
+                  <div class="calc-platform-title">Prime Video</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Oficial: $24.900/m</div>
+                </div>
+              </label>
+
+              <!-- Plataforma 3: Max HBO -->
+              <label class="calc-platform-card" onclick="toggleCalcCard(this)">
+                <input type="checkbox" value="max" onchange="updateSavingsCalculator()">
+                <img src="https://img.icons8.com/color/48/hbo-max.png" alt="Max" class="calc-platform-icon">
+                <div>
+                  <div class="calc-platform-title">Max (HBO) 4K</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Oficial: $40.900/m</div>
+                </div>
+              </label>
+
+              <!-- Plataforma 4: Disney+ -->
+              <label class="calc-platform-card checked" onclick="toggleCalcCard(this)">
+                <input type="checkbox" value="disney" checked onchange="updateSavingsCalculator()">
+                <img src="https://img.icons8.com/color/48/disney-plus.png" alt="Disney+" class="calc-platform-icon">
+                <div>
+                  <div class="calc-platform-title">Disney+ Premium</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Oficial: $49.900/m</div>
+                </div>
+              </label>
+
+              <!-- Plataforma 5: Spotify -->
+              <label class="calc-platform-card checked" onclick="toggleCalcCard(this)">
+                <input type="checkbox" value="spotify" checked onchange="updateSavingsCalculator()">
+                <img src="https://img.icons8.com/color/48/spotify.png" alt="Spotify" class="calc-platform-icon">
+                <div>
+                  <div class="calc-platform-title">Spotify Premium</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Oficial: $16.900/m</div>
+                </div>
+              </label>
+
+              <!-- Plataforma 6: YouTube -->
+              <label class="calc-platform-card" onclick="toggleCalcCard(this)">
+                <input type="checkbox" value="youtube" onchange="updateSavingsCalculator()">
+                <img src="https://img.icons8.com/color/48/youtube-play.png" alt="YouTube" class="calc-platform-icon">
+                <div>
+                  <div class="calc-platform-title">YouTube Premium</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Oficial: $20.900/m</div>
+                </div>
+              </label>
+
+              <!-- Plataforma 7: ChatGPT Plus -->
+              <label class="calc-platform-card" onclick="toggleCalcCard(this)">
+                <input type="checkbox" value="chatgpt" onchange="updateSavingsCalculator()">
+                <img src="https://img.icons8.com/color/48/chatgpt.png" alt="ChatGPT" class="calc-platform-icon">
+                <div>
+                  <div class="calc-platform-title">ChatGPT Plus (IA)</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">Oficial: $85.000/m</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- RESUMEN DEL CÁLCULO DE AHORRO -->
+          <div class="calc-summary-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px;">
+              <span style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Comparativa en Vivo</span>
+              <span id="calcPeriodBadge" style="font-size: 0.75rem; background: rgba(124,58,237,0.2); color: #c4b5fd; padding: 2px 10px; border-radius: 100px; font-weight: 700;">1 Mes</span>
+            </div>
+
+            <div class="calc-row official">
+              <span>Pagarías Oficial en Colombia:</span>
+              <del id="calcOfficialTotal">$136.600 COP</del>
+            </div>
+
+            <div class="calc-row ours">
+              <span>Pagas con StreamVault:</span>
+              <span id="calcOurTotal" style="color: #a78bfa;">$56.000 COP</span>
+            </div>
+
+            <div class="calc-savings-box">
+              <div>
+                <div class="label">Tu Ahorro Real en Bolsillo</div>
+                <div class="pct" id="calcSavingsPct">Ahorras un 59%</div>
+              </div>
+              <div class="amount" id="calcSavingsTotal">$80.600 COP</div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+              <button type="button" class="btn-primary" style="width: 100%; justify-content: center; padding: 14px; font-size: 0.92rem; font-weight: 700;" onclick="addCalcComboToCart()">
+                🛒 Agregar este Combo al Carrito
+              </button>
+              <button type="button" class="btn-whatsapp-hero" style="width: 100%; justify-content: center; padding: 12px; font-size: 0.88rem; font-weight: 600;" onclick="orderCalcComboWhatsApp()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Pedir este Ahorro por WhatsApp
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ BENEFICIOS ══════════════ -->
+  <section class="section benefits-section" id="beneficios">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">¿Por qué elegirnos?</span>
+        <h2 class="section-title">Beneficios que <span class="gradient-text">marcan la diferencia</span></h2>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">⚡</div>
+          <h4>Entrega Inmediata</h4>
+          <p>Recibe tu correo y contraseña en menos de 5 minutos después del pago por WhatsApp.</p>
+        </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">🛡️</div>
+          <h4>Garantía Total</h4>
+          <p>Si la cuenta falla, la reemplazamos sin costo adicional durante todo tu periodo.</p>
+        </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">💬</div>
+          <h4>Soporte 24/7</h4>
+          <p>Atención directa por WhatsApp, las 24 horas del día, los 7 días de la semana.</p>
+        </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">📱</div>
+          <h4>Pago fácil con Nequi</h4>
+          <p>Paga escaneando el QR o enviando al número de Nequi. Rápido y seguro.</p>
+        </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">🔄</div>
+          <h4>Renovación Garantizada</h4>
+          <p>Tu cuenta se renueva automáticamente sin que tengas que preocuparte.</p>
+        </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">💎</div>
+          <h4>Calidad Premium Real</h4>
+          <p>Todas las cuentas son planes premium con 4K, sin anuncios y múltiples pantallas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ TESTIMONIOS ══════════════ -->
+  <section class="section testimonials-section" id="testimonios">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">Testimonios</span>
+        <h2 class="section-title">Lo que dicen nuestros <span class="gradient-text">clientes</span></h2>
+      </div>
+      <div class="testimonials-slider" id="testimonialsSlider">
+        <div class="testimonials-track" id="testimonialsTrack">
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p>"Increíble servicio. Compré el combo completo y todo funcionó perfecto desde el primer minuto. ¡Totalmente recomendado!"</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">CA</div>
+              <div><strong>Carlos A.</strong><span>Cliente desde 2024</span></div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p>"El soporte es de 10. Tuve un problema y en 2 minutos me lo resolvieron por WhatsApp. Llevo 6 meses y ninguna queja."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">ML</div>
+              <div><strong>María L.</strong><span>Cliente desde 2023</span></div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p>"Pagué por Nequi y en 3 minutos ya tenía mi Netflix en 4K. Los precios son imbatibles. ¡El mejor servicio!"</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">DR</div>
+              <div><strong>Diego R.</strong><span>Cliente desde 2024</span></div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p>"Compré el paquete de 5 plataformas y me ahorro una fortuna cada mes. La entrega fue súper rápida por WhatsApp."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">AS</div>
+              <div><strong>Andrea S.</strong><span>Cliente desde 2024</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="slider-dots" id="sliderDots"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ FAQ ══════════════ -->
+  <section class="section faq-section" id="faq">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-tag">FAQ</span>
+        <h2 class="section-title">Preguntas <span class="gradient-text">frecuentes</span></h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Cómo realizo el pago?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>Puedes pagar por <strong>Nequi</strong> al número que aparece en el carrito, o escaneando el código QR. Una vez hecho el pago, envía la captura del comprobante a nuestro <strong>WhatsApp</strong> junto con tu nombre y el plan que quieres. ¡En menos de 5 minutos recibirás tu cuenta!</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Qué recibo después de pagar?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>Recibirás por WhatsApp el <strong>correo electrónico y la contraseña</strong> de tu cuenta premium. Solo tienes que iniciar sesión en la plataforma y ¡listo, a disfrutar!</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Las cuentas son legales?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>Sí, todas nuestras cuentas son obtenidas de manera legal a través de suscripciones familiares y planes compartidos autorizados por las plataformas.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Qué pasa si mi cuenta deja de funcionar?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>Contamos con <strong>garantía de reemplazo</strong>. Solo escríbenos por WhatsApp y te proporcionamos una cuenta nueva sin costo adicional dentro de tu periodo.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Cuánto tarda la entrega?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>La entrega es <strong>inmediata</strong>. Una vez que verificamos tu comprobante de pago en WhatsApp, recibirás tu correo y contraseña en menos de 5 minutos.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Puedo usar la cuenta en mi celular, Smart TV y PC?</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>¡Sí! Las cuentas funcionan en todos los dispositivos compatibles: celular, tablet, Smart TV, computador, consola de videojuegos, etc.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CTA FINAL ══════════════ -->
+  <section class="section cta-section">
+    <div class="container">
+      <div class="cta-card reveal">
+        <div class="cta-glow"></div>
+        <h2>¿Listo para empezar a <span class="gradient-text">disfrutar</span>?</h2>
+        <p>Únete a más de 15,000 clientes satisfechos. Paga por Nequi y recibe tu cuenta al instante.</p>
+        <div class="cta-buttons">
+          <a href="#planes" class="btn-primary btn-lg">
+            Ver Planes
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="https://wa.me/573001234567?text=Hola%20StreamVault!%20Quiero%20comprar%20una%20cuenta%20premium" class="btn-whatsapp btn-lg" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Escribir por WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <span class="logo-icon">⚡</span>
+            <span class="logo-text">Stream<span class="logo-accent">Vault</span></span>
+          </a>
+          <p>Tu tienda de confianza para cuentas de streaming premium. Paga por Nequi, recibe por WhatsApp.</p>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Instagram">📸</a>
+            <a href="#" class="social-link" aria-label="TikTok">🎵</a>
+            <a href="#" class="social-link" aria-label="Telegram">✈️</a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h5>Plataformas</h5>
+          <ul>
+            <li><a href="#planes">Netflix</a></li>
+            <li><a href="#planes">Prime Video</a></li>
+            <li><a href="#planes">HBO Max</a></li>
+            <li><a href="#planes">Spotify</a></li>
+            <li><a href="#planes">Disney+</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h5>Soporte & Legal</h5>
+          <ul>
+            <li><a href="https://wa.me/573001234567" target="_blank">WhatsApp Oficial</a></li>
+            <li><a href="#faq">Preguntas frecuentes</a></li>
+            <li><a href="terminos.html">📜 Términos y Condiciones</a></li>
+            <li><a href="admin.html" style="color: #a78bfa; font-weight: 600;">🔒 Panel de Control Admin</a></li>
+            <li><a href="#beneficios">Garantías</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h5>Métodos de pago</h5>
+          <ul>
+            <li><a href="#">💜 Nequi</a></li>
+            <li><a href="#">📱 Daviplata</a></li>
+            <li><a href="#">🏦 Transferencia</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 StreamVault. Todos los derechos reservados.</p>
+        <div class="payment-methods">
+          <span>💜 Nequi</span> <span>·</span> <span>📱 Daviplata</span> <span>·</span> <span>🏦 Bancolombia</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════ WHATSAPP FLOATING BTN ══════════════ -->
+  <a href="https://wa.me/573001234567?text=Hola%20StreamVault!%20Quiero%20información" class="wpp-float" target="_blank" aria-label="WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <span class="wpp-tooltip">¿Necesitas ayuda?</span>
+  </a>
+
+  <!-- ══════════════ CART FLOATING ══════════════ -->
+  <div class="cart-floating" id="cartFloat" onclick="openModal('cart')">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+    <span class="cart-count" id="cartCount">0</span>
+  </div>
+
+  <!-- ══════════════ NOTIFICATION TOAST ══════════════ -->
+  <div class="toast" id="toast">
+    <div class="toast-content">
+      <span class="toast-icon" id="toastIcon">✅</span>
+      <span id="toastMsg">Producto agregado al carrito</span>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL ══════════════ -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+    <div class="modal" id="modalBox" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
