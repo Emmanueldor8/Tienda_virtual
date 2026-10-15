@@ -6,11 +6,11 @@
 // ── CONFIGURACIÓN DE TU PROYECTO SUPABASE ──
 // Pega aquí tus credenciales obtenidas en Project Settings -> API
 const SUPABASE_CONFIG = {
-  // Reemplaza con tu Project URL (Ej: https://xyzcompany.supabase.co)
-  url: 'https://TU_PROYECTO.supabase.co',
+  // Project URL obtenido de tu dashboard de Supabase
+  url: 'https://eiuckjkdfimroiehzevd.supabase.co',
   
-  // Reemplaza con tu clave pública anon (anon / public key)
-  anonKey: 'TU_SUPABASE_ANON_KEY'
+  // Clave pública oficial (Publishable Key)
+  anonKey: 'sb_publishable_PO10dj-w89_ihTrP7c8i0Q_5RpnBmgV'
 };
 
 // Variable global del cliente Supabase
@@ -65,3 +65,4 @@ if (typeof window !== 'undefined') {
     window.addEventListener('DOMContentLoaded', initSupabase);
   }
 }
+
