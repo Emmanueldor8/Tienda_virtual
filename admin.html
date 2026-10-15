@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>StreamVault Admin | Control de Ventas & Flujo de Caja</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Iconos FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <style>
+    body {
+      background-color: #0a0a0f;
+      color: #f0f0f5;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .glass {
+      background: rgba(22, 22, 31, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #7c3aed, #2563eb, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gradient-primary {
+      background: linear-gradient(135deg, #7c3aed, #2563eb);
+    }
+    .pulse-glow {
+      animation: pulseGlow 2s infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.4) drop-shadow(0 0 10px rgba(124, 58, 237, 0.6)); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <!-- ══════════════ NAVBAR ADMIN ══════════════ -->
+  <nav class="glass sticky top-0 z-50 px-5 py-3.5 flex justify-between items-center border-b border-slate-800/80">
+    <div class="flex items-center gap-3">
+      <a href="index.html" class="flex items-center gap-2">
+        <span class="text-2xl pulse-glow">⚡</span>
+        <div>
+          <span class="text-xl font-extrabold tracking-tight text-white">Stream<span class="text-indigo-400">Vault</span></span>
+          <span class="ml-2 px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">ADMIN PORTAL</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="flex items-center gap-2.5">
+      <a href="index.html" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700/60 transition flex items-center gap-1.5">
+        <i class="fa-solid fa-store text-indigo-400"></i>
+        <span class="hidden sm:inline">Ver Tienda</span>
+      </a>
+      <button id="btnLogout" onclick="logoutAdmin()" class="hidden px-3.5 py-2 rounded-xl text-xs font-semibold bg-rose-600/20 hover:bg-rose-600/30 text-rose-300 border border-rose-500/30 transition flex items-center gap-1.5">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span class="hidden sm:inline">Cerrar Sesión</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══════════════ VISTA LOGIN ADMIN ══════════════ -->
+  <main id="loginView" class="flex-1 flex items-center justify-center p-4">
+    <div class="glass max-w-md w-full rounded-3xl p-8 space-y-6 text-center border border-indigo-500/20 shadow-2xl shadow-indigo-950/40">
+      <div class="w-16 h-16 rounded-2xl bg-indigo-600/20 border border-indigo-500/40 flex items-center justify-center mx-auto text-3xl text-indigo-400">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <div>
+        <h2 class="text-2xl font-black text-white">Panel de Administración</h2>
+        <p class="text-xs text-slate-400 mt-1">Acceso restringido únicamente para gestión de ventas y finanzas.</p>
+      </div>
+
+      <form onsubmit="handleAdminLogin(event)" class="space-y-4 text-left">
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1">Usuario Administrador</label>
+          <input type="text" id="adminUserInput" value="admin" placeholder="admin" autocomplete="username"
+            class="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700 text-white focus:outline-none focus:border-indigo-500 transition text-sm">
+        </div>
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="block text-xs font-semibold text-slate-400">Contraseña</label>
+            <button type="button" onclick="togglePassVisibility()" class="text-[11px] text-indigo-400 hover:text-indigo-300">
+              <span id="passToggleText">Mostrar</span>
+            </button>
+          </div>
+          <input type="password" id="adminPassInput" value="admin123" placeholder="admin123" required autocomplete="current-password"
+            class="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700 text-white focus:outline-none focus:border-indigo-500 transition text-sm">
+        </div>
+
+        <div id="loginError" class="p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-xs text-rose-300 hidden flex items-center gap-2">
+          <i class="fa-solid fa-triangle-exclamation text-rose-400"></i>
+          <span>Contraseña incorrecta. Recuerda que la clave es <strong>admin123</strong>.</span>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 rounded-xl gradient-primary font-bold text-white shadow-lg shadow-indigo-600/30 hover:opacity-95 transition text-sm flex items-center justify-center gap-2">
+          <i class="fa-solid fa-lock-open"></i> Entrar al Panel de Control
+        </button>
+
+        <button type="button" onclick="quickLoginAdmin()" class="w-full py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-xs text-indigo-300 font-semibold border border-indigo-500/30 transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Acceso Rápido con 1 Clic
+        </button>
+      </form>
+
+      <div class="pt-4 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-key text-indigo-400"></i>
+        <span>Usuario: <strong class="text-white">admin</strong> | Clave: <strong class="text-white">admin123</strong></span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ══════════════ VISTA PANEL ADMIN ══════════════ -->
+  <main id="adminView" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 space-y-8">
+    
+    <!-- ENCABEZADO Y ACCIONES RÁPIDAS -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-black text-white flex items-center gap-2.5">
+          <i class="fa-solid fa-chart-line text-indigo-400"></i> Flujo de Caja & Control de Ventas
+        </h1>
+        <p class="text-slate-400 text-xs sm:text-sm mt-1">
+          Supervisa ingresos reales, salidas a proveedores (Z2U), fondo de garantía y recordatorios automáticos por WhatsApp.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button onclick="loadDemoData()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Cargar Datos Demo
+        </button>
+        <button onclick="exportCSV()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-file-excel"></i> Exportar a Excel (CSV)
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════ DASHBOARD DE FLUJO DE CAJA (KPIs) ══════════════ -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-wallet text-indigo-400"></i> Estado Financiero & Flujo Neto
+        </h2>
+        <span class="text-xs text-slate-400">Moneda: <strong class="text-slate-200">COP (Pesos Colombianos)</strong></span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- INGRESOS TOTALES -->
+        <div class="glass rounded-2xl p-5 border-l-4 border-indigo-500 relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <span class="text-xs text-slate-400 uppercase font-semibold">Total Ingresos (Ventas)</span>
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-sm">
+              <i class="fa-solid fa-arrow-down-left"></i>
+            </div>
+          </div>
+          <p id="kpiRevenue" class="text-2xl sm:text-3xl font-extrabold text-white mt-2">$0</p>
+          <span id="kpiCount" class="text-xs text-slate-400 mt-1 block">0 ventas registradas</span>
+        </div>
+
+        <!-- EGRESOS / COSTO PROVEEDORES -->
+        <div class="glass rounded-2xl p-5 border-l-4 border-rose-500 relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <span class="text-xs text-slate-400 uppercase font-semibold">Costo Proveedores (Z2U)</span>
+            <div class="w-8 h-8 rounded-lg bg-rose-500/20 flex items-center justify-center text-rose-400 text-sm">
+              <i class="fa-solid fa-arrow-up-right"></i>
+            </div>
+          </div>
+          <p id="kpiCost" class="text-2xl sm:text-3xl font-extrabold text-slate-200 mt-2">$0</p>
+          <span class="text-xs text-slate-400 mt-1 block">Salidas de capital por cuentas</span>
+        </div>
+
+        <!-- FONDO DE GARANTÍA (15%) -->
+        <div class="glass rounded-2xl p-5 border-l-4 border-amber-500 relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <span class="text-xs text-amber-300 uppercase font-semibold">Fondo Reserva (15%)</span>
+            <div class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400 text-sm">
+              <i class="fa-solid fa-shield-heart"></i>
+            </div>
+          </div>
+          <p id="kpiWarranty" class="text-2xl sm:text-3xl font-extrabold text-amber-400 mt-2">$0</p>
+          <span class="text-xs text-slate-400 mt-1 block">Colchón para caídas y reposiciones</span>
+        </div>
+
+        <!-- FLUJO DE CAJA LIBRE REAL -->
+        <div class="glass rounded-2xl p-5 border-l-4 border-emerald-500 relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <span class="text-xs text-emerald-300 uppercase font-semibold">Flujo Neto en Bolsillo</span>
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-sm">
+              <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+          </div>
+          <p id="kpiNetProfit" class="text-2xl sm:text-3xl font-black text-emerald-400 mt-2">$0</p>
+          <span id="kpiMargin" class="text-xs text-emerald-300 mt-1 block font-medium">Margen Neto: 0%</span>
+        </div>
+      </div>
+
+      <!-- BARRA VISUAL DE FLUJO DE CAJA -->
+      <div class="glass rounded-2xl p-5 space-y-3">
+        <div class="flex flex-col sm:flex-row justify-between text-xs sm:text-sm font-semibold text-slate-300 gap-1">
+          <span>Composición del Flujo de Caja:</span>
+          <div class="flex gap-4 text-xs">
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-500 inline-block"></span> Costo: <strong id="barCostPct">0%</strong></span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-500 inline-block"></span> Reserva (15%): <strong id="barWarrantyPct">0%</strong></span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500 inline-block"></span> Ganancia Libre: <strong id="barProfitPct">0%</strong></span>
+          </div>
+        </div>
+        <div class="w-full h-4 rounded-full bg-slate-900 overflow-hidden flex border border-slate-800">
+          <div id="barCost" class="bg-rose-500 h-full transition-all duration-500" style="width: 0%"></div>
+          <div id="barWarranty" class="bg-amber-500 h-full transition-all duration-500" style="width: 0%"></div>
+          <div id="barProfit" class="bg-emerald-500 h-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ GRID: FORMULARIO + CRM DE VENTAS ══════════════ -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+      
+      <!-- FORMULARIO: REGISTRAR VENTA -->
+      <div class="glass rounded-3xl p-6 space-y-4 border border-indigo-500/20">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-circle-plus text-indigo-400"></i> Registrar Nueva Venta
+        </h3>
+        <p class="text-xs text-slate-400">Ingresa la venta para calcular automáticamente el margen y programar la fecha de corte.</p>
+
+        <form id="saleForm" onsubmit="addSale(event)" class="space-y-3 text-sm">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Nombre del Cliente *</label>
+            <input type="text" id="clientName" required placeholder="Ej: Carlos Gómez"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-indigo-500 text-sm">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">WhatsApp del Cliente (sin +57) *</label>
+            <input type="tel" id="clientPhone" required placeholder="Ej: 3001234567"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-indigo-500 text-sm">
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Plataforma *</label>
+              <select id="salePlatform" onchange="autoFillPrices()" class="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-indigo-500 text-xs sm:text-sm">
+                <!-- Se llena con JS -->
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Duración *</label>
+              <select id="saleDuration" onchange="autoFillPrices()" class="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-indigo-500 text-xs sm:text-sm">
+                <option value="1">1 Mes</option>
+                <option value="3">3 Meses</option>
+                <option value="6">6 Meses</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Costo Z2U (COP) *</label>
+              <input type="number" id="saleCost" required
+                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-rose-300 font-mono text-sm focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 mb-1">Precio Venta (COP) *</label>
+              <input type="number" id="salePrice" required
+                class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-emerald-400 font-mono font-bold text-sm focus:outline-none focus:border-indigo-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Perfil / Cuenta Asignada (Opcional)</label>
+            <input type="text" id="saleAccount" placeholder="Ej: netflix3@correo.com - Perfil 2 (Pin 1234)"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-indigo-500 text-sm">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1">Fecha de Activación *</label>
+            <input type="date" id="saleStartDate" required
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-indigo-500 text-sm">
+          </div>
+
+          <button type="submit" class="w-full py-3.5 rounded-xl gradient-primary hover:opacity-95 text-white font-bold transition shadow-lg shadow-indigo-600/25 flex items-center justify-center gap-2 mt-2">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Venta en Flujo
+          </button>
+        </form>
+      </div>
+
+      <!-- CRM: TABLA DE VENCIMIENTOS Y CLIENTES -->
+      <div class="glass rounded-3xl p-6 lg:col-span-2 space-y-4 border border-slate-800">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-users text-indigo-400"></i> Clientes & Semáforo de Vencimientos
+            </h3>
+            <p class="text-xs text-slate-400">Ordenados automáticamente por la fecha de corte más cercana.</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <input type="text" id="searchClient" oninput="renderSalesTable()" placeholder="Buscar cliente..."
+              class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-indigo-500">
+            <select id="filterStatus" onchange="renderSalesTable()" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-indigo-500">
+              <option value="all">Todos los estados</option>
+              <option value="urgent">⚠️ Por vencer (≤ 5 días) o Vencidos</option>
+              <option value="active">✅ Activos al día</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400 uppercase text-[11px] font-semibold">
+                <th class="py-3 px-2.5">Cliente / Perfil</th>
+                <th class="py-3 px-2.5">Plan</th>
+                <th class="py-3 px-2.5">Vencimiento</th>
+                <th class="py-3 px-2.5">Estado</th>
+                <th class="py-3 px-2.5">Margen</th>
+                <th class="py-3 px-2.5 text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="salesTableBody" class="divide-y divide-slate-800/60">
+              <!-- Filas dinámicas -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ══════════════ FOOTER ADMIN ══════════════ -->
+  <footer class="text-center py-6 text-xs text-slate-500 border-t border-slate-900 mt-auto">
+    StreamVault Admin © 2026 — Sistema de Flujo de Caja & Gestión de Cuentas Premium
+  </footer>
+
+  <!-- ══════════════ SCRIPT ADMIN ══════════════ -->
+  <script>
+    // ── CREDENCIALES DE ADMINISTRADOR ──
+    const ADMIN_CREDENTIALS = {
+      user: "admin",
+      pass: "admin123" // Puedes cambiarla aquí
+    };
+
+    // ── CATÁLOGO DE SERVICIOS Y COSTOS ESTIMADOS EN COP ──
+    const SERVICES = [
+      {
+        id: "netflix",
+        name: "Netflix Premium 4K",
+        plans: {
+          1: { cost: 8000, price: 18000 },
+          3: { cost: 22000, price: 48000 },
+          6: { cost: 42000, price: 90000 }
+        }
+      },
+      {
+        id: "prime",
+        name: "Amazon Prime Video",
+        plans: {
+          1: { cost: 5200, price: 12000 },
+          3: { cost: 11500, price: 30000 },
+          6: { cost: 20500, price: 50000 }
+        }
+      },
+      {
+        id: "max",
+        name: "Max (HBO Platino 4K)",
+        plans: {
+          1: { cost: 5200, price: 14000 },
+          3: { cost: 11000, price: 35000 },
+          6: { cost: 17500, price: 60000 }
+        }
+      },
+      {
+        id: "disney",
+        name: "Disney+ Premium 4K",
+        plans: {
+          1: { cost: 5800, price: 16000 },
+          3: { cost: 11500, price: 40000 },
+          6: { cost: 20000, price: 70000 }
+        }
+      },
+      {
+        id: "spotify",
+        name: "Spotify Premium",
+        plans: {
+          1: { cost: 4500, price: 10000 },
+          3: { cost: 11000, price: 26000 },
+          6: { cost: 20000, price: 48000 }
+        }
+      },
+      {
+        id: "youtube",
+        name: "YouTube Premium + Music",
+        plans: {
+          1: { cost: 5200, price: 12000 },
+          3: { cost: 25000, price: 38000 },
+          6: { cost: 50000, price: 72000 }
+        }
+      },
+      {
+        id: "chatgpt_shared",
+        name: "ChatGPT Plus (Compartida)",
+        plans: {
+          1: { cost: 16000, price: 35000 },
+          3: { cost: 42500, price: 90000 },
+          6: { cost: 82000, price: 165000 }
+        }
+      },
+      {
+        id: "chatgpt_priv",
+        name: "ChatGPT Plus (Privada)",
+        plans: {
+          1: { cost: 58000, price: 70000 },
+          3: { cost: 135000, price: 175000 },
+          6: { cost: 195000, price: 280000 }
+        }
+      }
+    ];
+
+    let sales = JSON.parse(localStorage.getItem("streamvault_sales")) || [];
+    let isAdminLogged = sessionStorage.getItem("streamvault_admin_logged") === "true" ||
+                        localStorage.getItem("streamvault_admin_logged") === "true";
+
+    const formatCOP = (num) => "$" + Number(num || 0).toLocaleString("es-CO");
+
+    window.onload = () => {
+      populatePlatformSelect();
+      const todayStr = new Date().toISOString().split("T")[0];
+      const dateEl = document.getElementById("saleStartDate");
+      if (dateEl) dateEl.value = todayStr;
+      autoFillPrices();
+
+      if (isAdminLogged) {
+        showAdminView();
+      } else {
+        showLoginView();
+      }
+    };
+
+    function showLoginView() {
+      document.getElementById("loginView").classList.remove("hidden");
+      document.getElementById("adminView").classList.add("hidden");
+      document.getElementById("btnLogout").classList.add("hidden");
+    }
+
+    function showAdminView() {
+      document.getElementById("loginView").classList.add("hidden");
+      document.getElementById("adminView").classList.remove("hidden");
+      document.getElementById("btnLogout").classList.remove("hidden");
+      renderSalesTable();
+    }
+
+    function togglePassVisibility() {
+      const input = document.getElementById("adminPassInput");
+      const text = document.getElementById("passToggleText");
+      if (input.type === "password") {
+        input.type = "text";
+        text.innerText = "Ocultar";
+      } else {
+        input.type = "password";
+        text.innerText = "Mostrar";
+      }
+    }
+
+    function quickLoginAdmin() {
+      document.getElementById("adminUserInput").value = "admin";
+      document.getElementById("adminPassInput").value = "admin123";
+      handleAdminLogin(new Event("submit"));
+    }
+
+    function handleAdminLogin(e) {
+      if (e) e.preventDefault();
+      const u = (document.getElementById("adminUserInput")?.value || "").trim().toLowerCase();
+      const p = (document.getElementById("adminPassInput")?.value || "").trim();
+
+      // Permitir acceso con admin / admin123 o variaciones comunes
+      const passCorrect = (p === "admin123" || p === "admin" || p === ADMIN_CREDENTIALS.pass);
+      const userCorrect = (u === "admin" || u === "administrador" || u === "" || u === ADMIN_CREDENTIALS.user.toLowerCase());
+
+      if (passCorrect && userCorrect) {
+        isAdminLogged = true;
+        sessionStorage.setItem("streamvault_admin_logged", "true");
+        localStorage.setItem("streamvault_admin_logged", "true");
+        const errEl = document.getElementById("loginError");
+        if (errEl) errEl.classList.add("hidden");
+        showAdminView();
+      } else {
+        const errEl = document.getElementById("loginError");
+        if (errEl) errEl.classList.remove("hidden");
+      }
+    }
+
+    function logoutAdmin() {
+      isAdminLogged = false;
+      sessionStorage.removeItem("streamvault_admin_logged");
+      localStorage.removeItem("streamvault_admin_logged");
+      showLoginView();
+    }
+
+    function populatePlatformSelect() {
+      const sel = document.getElementById("salePlatform");
+      if (!sel) return;
+      sel.innerHTML = "";
+      SERVICES.forEach(s => {
+        sel.innerHTML += `<option value="${s.id}">${s.name}</option>`;
+      });
+    }
+
+    function autoFillPrices() {
+      const platId = document.getElementById("salePlatform").value;
+      const dur = Number(document.getElementById("saleDuration").value);
+      const srv = SERVICES.find(s => s.id === platId);
+      if (srv && srv.plans[dur]) {
+        document.getElementById("saleCost").value = srv.plans[dur].cost;
+        document.getElementById("salePrice").value = srv.plans[dur].price;
+      }
+    }
+
+    function addSale(e) {
+      e.preventDefault();
+      const platId = document.getElementById("salePlatform").value;
+      const srv = SERVICES.find(s => s.id === platId);
+      const durationMonths = Number(document.getElementById("saleDuration").value);
+      const startDateStr = document.getElementById("saleStartDate").value;
+
+      const startDate = new Date(startDateStr + "T00:00:00");
+      const endDate = new Date(startDate);
+      endDate.setMonth(endDate.getMonth() + durationMonths);
+
+      const newSale = {
+        id: Date.now(),
+        clientName: document.getElementById("clientName").value.trim(),
+        clientPhone: document.getElementById("clientPhone").value.trim(),
+        platformId: platId,
+        platformName: srv ? srv.name : platId,
+        duration: durationMonths,
+        cost: Number(document.getElementById("saleCost").value),
+        price: Number(document.getElementById("salePrice").value),
+        account: document.getElementById("saleAccount").value.trim() || "Sin nota de perfil",
+        startDate: startDateStr,
+        endDate: endDate.toISOString().split("T")[0]
+      };
+
+      sales.unshift(newSale);
+      saveSales();
+
+      document.getElementById("clientName").value = "";
+      document.getElementById("clientPhone").value = "";
+      document.getElementById("saleAccount").value = "";
+      renderSalesTable();
+    }
+
+    function saveSales() {
+      localStorage.setItem("streamvault_sales", JSON.stringify(sales));
+    }
+
+    function deleteSale(id) {
+      if (!confirm("¿Deseas eliminar este registro de venta?")) return;
+      sales = sales.filter(s => s.id !== id);
+      saveSales();
+      renderSalesTable();
+    }
+
+    function renewSale(id) {
+      const item = sales.find(s => s.id === id);
+      if (!item) return;
+      const currentEnd = new Date(item.endDate + "T00:00:00");
+      const today = new Date();
+      const baseDate = currentEnd > today ? currentEnd : today;
+      baseDate.setMonth(baseDate.getMonth() + Number(item.duration));
+      item.endDate = baseDate.toISOString().split("T")[0];
+      saveSales();
+      renderSalesTable();
+    }
+
+    function renderSalesTable() {
+      const tbody = document.getElementById("salesTableBody");
+      const search = document.getElementById("searchClient").value.toLowerCase();
+      const filter = document.getElementById("filterStatus").value;
+
+      tbody.innerHTML = "";
+
+      let totalRevenue = 0;
+      let totalCost = 0;
+      let expiringCount = 0;
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // Ordenar por fecha de vencimiento más próxima
+      const sortedSales = [...sales].sort((a, b) => new Date(a.endDate) - new Date(b.endDate));
+
+      sortedSales.forEach(s => {
+        const profit = s.price - s.cost;
+        totalRevenue += s.price;
+        totalCost += s.cost;
+
+        const endDate = new Date(s.endDate + "T00:00:00");
+        const diffTime = endDate - today;
+        const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (daysLeft <= 5) expiringCount++;
+
+        const matchesSearch = s.clientName.toLowerCase().includes(search) ||
+                              s.platformName.toLowerCase().includes(search) ||
+                              s.account.toLowerCase().includes(search);
+        if (!matchesSearch) return;
+        if (filter === "urgent" && daysLeft > 5) return;
+        if (filter === "active" && daysLeft <= 5) return;
+
+        // Semáforo de corte
+        let badgeHTML = "";
+        if (daysLeft < 0) {
+          badgeHTML = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">Vencido (${Math.abs(daysLeft)}d)</span>`;
+        } else if (daysLeft === 0) {
+          badgeHTML = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-500/30 text-rose-300 border border-rose-500/40 animate-pulse">¡Vence HOY!</span>`;
+        } else if (daysLeft <= 5) {
+          badgeHTML = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">Vence en ${daysLeft}d</span>`;
+        } else {
+          badgeHTML = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">${daysLeft}d restantes</span>`;
+        }
+
+        const waMsg = `Hola *${s.clientName}* 👋, te escribimos de *StreamVault* para recordarte que tu cuenta de *${s.platformName}* (${s.duration}m) vence el *${s.endDate}*. ¿Deseas renovarla por *${formatCOP(s.price)}* para no perder tu acceso ni perfil?`;
+        const cleanPhone = s.clientPhone.replace(/\D/g, "");
+        const waUrl = `https://wa.me/57${cleanPhone}?text=${encodeURIComponent(waMsg)}`;
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-800/40 transition text-xs sm:text-sm">
+            <td class="py-3 px-2.5">
+              <div class="font-bold text-white">${s.clientName}</div>
+              <div class="text-[11px] text-slate-400">${s.clientPhone} • <span class="text-indigo-300">${s.account}</span></div>
+            </td>
+            <td class="py-3 px-2.5">
+              <div class="font-semibold text-slate-200">${s.platformName}</div>
+              <div class="text-[11px] text-slate-400">${s.duration} ${s.duration === 1 ? 'Mes' : 'Meses'}</div>
+            </td>
+            <td class="py-3 px-2.5">
+              <div class="font-medium text-slate-200">${s.endDate}</div>
+              <div class="text-[11px] text-slate-500">Inicio: ${s.startDate}</div>
+            </td>
+            <td class="py-3 px-2.5">${badgeHTML}</td>
+            <td class="py-3 px-2.5">
+              <div class="font-bold text-emerald-400">+${formatCOP(profit)}</div>
+              <div class="text-[11px] text-slate-400">Venta: ${formatCOP(s.price)}</div>
+            </td>
+            <td class="py-3 px-2.5 text-right space-x-1 whitespace-nowrap">
+              <a href="${waUrl}" target="_blank" title="Cobrar/Recordar por WhatsApp"
+                class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white transition">
+                <i class="fa-brands fa-whatsapp"></i>
+              </a>
+              <button onclick="renewSale(${s.id})" title="Renovar +${s.duration} mes(es)"
+                class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white transition">
+                <i class="fa-solid fa-rotate"></i>
+              </button>
+              <button onclick="deleteSale(${s.id})" title="Eliminar registro"
+                class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white transition">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      if (sortedSales.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-500">No hay ventas registradas todavía. Usa el formulario o haz clic en "Cargar Datos Demo".</td></tr>`;
+      }
+
+      // ── CÁLCULO DE FLUJO DE CAJA ──
+      const grossProfit = totalRevenue - totalCost;
+      const warrantyReserve = Math.round(grossProfit * 0.15); // 15% colchón de garantías
+      const netProfit = grossProfit - warrantyReserve;
+      const marginPct = totalRevenue > 0 ? Math.round((netProfit / totalRevenue) * 100) : 0;
+
+      document.getElementById("kpiRevenue").innerText = formatCOP(totalRevenue);
+      document.getElementById("kpiCount").innerText = `${sales.length} suscripciones registradas`;
+      document.getElementById("kpiCost").innerText = formatCOP(totalCost);
+      document.getElementById("kpiWarranty").innerText = formatCOP(warrantyReserve);
+      document.getElementById("kpiNetProfit").innerText = formatCOP(netProfit);
+      document.getElementById("kpiMargin").innerText = `Margen Neto Real: ${marginPct}%`;
+
+      // Actualizar Barra Visual de Flujo de Caja
+      if (totalRevenue > 0) {
+        const costPct = Math.round((totalCost / totalRevenue) * 100);
+        const warPct = Math.round((warrantyReserve / totalRevenue) * 100);
+        const profPct = Math.max(0, 100 - costPct - warPct);
+
+        document.getElementById("barCost").style.width = costPct + "%";
+        document.getElementById("barWarranty").style.width = warPct + "%";
+        document.getElementById("barProfit").style.width = profPct + "%";
+
+        document.getElementById("barCostPct").innerText = costPct + "%";
+        document.getElementById("barWarrantyPct").innerText = warPct + "%";
+        document.getElementById("barProfitPct").innerText = profPct + "%";
+      } else {
+        document.getElementById("barCost").style.width = "0%";
+        document.getElementById("barWarranty").style.width = "0%";
+        document.getElementById("barProfit").style.width = "0%";
+        document.getElementById("barCostPct").innerText = "0%";
+        document.getElementById("barWarrantyPct").innerText = "0%";
+        document.getElementById("barProfitPct").innerText = "0%";
+      }
+    }
+
+    function loadDemoData() {
+      const today = new Date();
+      const fmt = (d) => d.toISOString().split("T")[0];
+
+      const d1 = new Date(today); d1.setDate(d1.getDate() + 2);  // Vence en 2 días
+      const d2 = new Date(today); d2.setDate(d2.getDate() - 1);  // Venció ayer
+      const d3 = new Date(today); d3.setDate(d3.getDate() + 25); // Activo (25 días)
+      const d4 = new Date(today); d4.setDate(d4.getDate() + 80); // Activo (80 días)
+
+      sales = [
+        { id: 101, clientName: "Andrés Felipe Ríos", clientPhone: "3004567890", platformId: "netflix", platformName: "Netflix Premium 4K", duration: 1, cost: 8000, price: 18000, account: "net_user1@correo.com (Pin 1111)", startDate: "2026-09-17", endDate: fmt(d1) },
+        { id: 102, clientName: "Laura Valentina Mora", clientPhone: "3119876543", platformId: "max", platformName: "Max (HBO Platino 4K)", duration: 3, cost: 11000, price: 35000, account: "max4k@stream.com (Perfil 3)", startDate: "2026-07-14", endDate: fmt(d2) },
+        { id: 103, clientName: "Camilo Restrepo", clientPhone: "3152223344", platformId: "chatgpt_shared", platformName: "ChatGPT Plus (Compartida)", duration: 3, cost: 42500, price: 90000, account: "gptplus@ia.com", startDate: fmt(today), endDate: fmt(d3) },
+        { id: 104, clientName: "Diana Carolina Gil", clientPhone: "3208889900", platformId: "prime", platformName: "Amazon Prime Video", duration: 6, cost: 20500, price: 50000, account: "prime_diana@outlook.com", startDate: fmt(today), endDate: fmt(d4) },
+        { id: 105, clientName: "Mateo Salazar", clientPhone: "3015554433", platformId: "disney", platformName: "Disney+ Premium 4K", duration: 1, cost: 5800, price: 16000, account: "disney_plus@stream.com (Perfil 1)", startDate: fmt(today), endDate: fmt(d3) }
+      ];
+      saveSales();
+      renderSalesTable();
+    }
+
+    function exportCSV() {
+      if (sales.length === 0) return alert("No hay ventas registradas para exportar.");
+      let csv = "ID,Cliente,WhatsApp,Plataforma,Meses,Cuenta,Fecha Inicio,Fecha Corte,Costo Z2U,Precio Venta,Ganancia Bruta\n";
+      sales.forEach(s => {
+        csv += `"${s.id}","${s.clientName}","${s.clientPhone}","${s.platformName}",${s.duration},"${s.account}",${s.startDate},${s.endDate},${s.cost},${s.price},${s.price - s.cost}\n`;
+      });
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `flujo_caja_streamvault_${new Date().toISOString().split("T")[0]}.csv`;
+      a.click();
+    }
+  </script>
+</body>
+</html>
+
