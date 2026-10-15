@@ -66,7 +66,7 @@ function setCurrentUser(user) {
   updateNavAuth();
 }
 
-function registerUser(name, phone, email, password) {
+async function registerUser(name, phone, email, password) {
   // Validations
   if (!name || name.trim().length < 2) {
     showToast('⚠️ Ingresa tu nombre completo.');
@@ -85,6 +85,28 @@ function registerUser(name, phone, email, password) {
     return false;
   }
 
+  // 1. Registro directo en Supabase Auth si está configurado
+  if (window.Backend && window.Backend.auth && isSupabaseConfigured()) {
+    showToast('⏳ Registrando cuenta en Supabase...');
+    const res = await Backend.auth.register(name, phone, email, password);
+    if (!res.success) {
+      showToast('❌ ' + (res.error || 'Error al registrarse en Supabase'));
+      return false;
+    }
+    const userObj = {
+      id: res.user ? res.user.id : Date.now(),
+      name: name.trim(),
+      phone: phone.trim(),
+      email: email.trim().toLowerCase(),
+      rol: 'cliente'
+    };
+    saveUser(userObj);
+    setCurrentUser(userObj);
+    showToast(`🎉 ¡Bienvenido, ${name.split(' ')[0]}! Cuenta guardada en Supabase.`);
+    return true;
+  }
+
+  // 2. Respaldo LocalStorage
   const users = getUsers();
   const existing = users.find(u => u.email.toLowerCase() === email.trim().toLowerCase());
   if (existing) {
@@ -97,7 +119,8 @@ function registerUser(name, phone, email, password) {
     name: name.trim(),
     phone: phone.trim(),
     email: email.trim().toLowerCase(),
-    password: password // En producción se almacena con hash en backend
+    password: password,
+    rol: 'cliente'
   };
 
   saveUser(newUser);
@@ -106,7 +129,7 @@ function registerUser(name, phone, email, password) {
   return true;
 }
 
-function loginUser(emailOrPhone, password) {
+async function loginUser(emailOrPhone, password) {
   if (!emailOrPhone || !password) {
     showToast('⚠️ Completa todos los campos.');
     return false;
@@ -134,7 +157,38 @@ function loginUser(emailOrPhone, password) {
     return false;
   }
 
-  // ── 2. USUARIO CLIENTE NORMAL ──
+  // ── 2. LOGIN CON SUPABASE AUTH SI ESTÁ CONECTADO ──
+  if (window.Backend && window.Backend.auth && isSupabaseConfigured() && query.includes('@')) {
+    showToast('⏳ Verificando credenciales en Supabase...');
+    const res = await Backend.auth.login(query, pass);
+    if (!res.success) {
+      showToast('❌ ' + (res.error || 'Credenciales inválidas en Supabase.'));
+      return false;
+    }
+
+    const prof = res.profile;
+    const userObj = {
+      id: res.user.id,
+      name: prof ? prof.nombre_completo : query.split('@')[0],
+      phone: prof ? prof.telefono : '',
+      email: res.user.email,
+      rol: prof ? prof.rol : 'cliente'
+    };
+
+    if (userObj.rol === 'admin') {
+      sessionStorage.setItem("streamvault_admin_logged", "true");
+      localStorage.setItem("streamvault_admin_logged", "true");
+      showToast('⚡ ¡Acceso Administrador verificado! Abriendo panel...');
+      setTimeout(() => { window.location.href = 'admin.html'; }, 500);
+      return true;
+    }
+
+    setCurrentUser(userObj);
+    showToast(`👋 ¡Hola de nuevo, ${userObj.name.split(' ')[0]}!`);
+    return true;
+  }
+
+  // ── 3. RESPALDO LOCALSTORAGE ──
   const users = getUsers();
   const user = users.find(u => (u.email.toLowerCase() === query || u.phone === query) && u.password === pass);
 
@@ -502,14 +556,14 @@ function renderLoginModal() {
   `;
 }
 
-function handleStandaloneLogin(e) {
+async function handleStandaloneLogin(e) {
   e.preventDefault();
   const email = document.getElementById('loginEmail').value.trim();
   const pass = document.getElementById('loginPassword').value.trim();
 
   const isAdmin = (email.toLowerCase() === 'admin' || email.toLowerCase() === 'admin@streamvault.com' || email.toLowerCase() === 'administrador') && (pass === 'admin123' || pass === 'admin');
 
-  if (loginUser(email, pass)) {
+  if (await loginUser(email, pass)) {
     closeModal();
     if (!isAdmin && cart.length > 0) {
       setTimeout(() => openModal('cart'), 400);
@@ -553,14 +607,14 @@ function renderRegisterModal() {
   `;
 }
 
-function handleStandaloneRegister(e) {
+async function handleStandaloneRegister(e) {
   e.preventDefault();
   const name = document.getElementById('regName').value;
   const phone = document.getElementById('regPhone').value;
   const email = document.getElementById('regEmail').value;
   const pass = document.getElementById('regPassword').value;
 
-  if (registerUser(name, phone, email, pass)) {
+  if (await registerUser(name, phone, email, pass)) {
     closeModal();
     if (cart.length > 0) {
       setTimeout(() => openModal('cart'), 400);
@@ -696,11 +750,11 @@ function renderCartModal() {
           </ol>
         </div>
 
-        <!-- Botón de WhatsApp con mensaje personalizado -->
-        <a href="https://wa.me/${CONFIG.whatsappNumber}?text=${wppMessage}" target="_blank" class="btn-wpp-pay">
+        <!-- Botón de WhatsApp con registro automático en Supabase -->
+        <button type="button" onclick="confirmOrderAndOpenWhatsApp()" class="btn-wpp-pay" style="width: 100%; border: none; cursor: pointer; text-decoration: none; justify-content: center;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Enviar comprobante por WhatsApp
-        </a>
+        </button>
 
         <!-- Nota y Términos -->
         <div class="payment-note">
@@ -784,30 +838,58 @@ function renderCartModal() {
   modalContent.innerHTML = html;
 }
 
-function handleCartLogin(e) {
+async function handleCartLogin(e) {
   e.preventDefault();
   const email = document.getElementById('cartLoginEmail').value.trim();
   const pass = document.getElementById('cartLoginPassword').value.trim();
 
   const isAdmin = (email.toLowerCase() === 'admin' || email.toLowerCase() === 'admin@streamvault.com' || email.toLowerCase() === 'administrador') && (pass === 'admin123' || pass === 'admin');
 
-  if (loginUser(email, pass)) {
+  if (await loginUser(email, pass)) {
     if (!isAdmin) {
       renderCartModal(); // Recarga el modal con los datos de Nequi desbloqueados
     }
   }
 }
 
-function handleCartRegister(e) {
+async function handleCartRegister(e) {
   e.preventDefault();
   const name = document.getElementById('cartRegName').value;
   const phone = document.getElementById('cartRegPhone').value;
   const email = document.getElementById('cartRegEmail').value;
   const pass = document.getElementById('cartRegPassword').value;
 
-  if (registerUser(name, phone, email, pass)) {
+  if (await registerUser(name, phone, email, pass)) {
     renderCartModal(); // Recarga el modal con los datos de Nequi desbloqueados
   }
+}
+
+async function confirmOrderAndOpenWhatsApp() {
+  if (cart.length === 0) return;
+  const currentUser = getCurrentUser();
+  if (!currentUser) {
+    showToast('⚠️ Debes registrarte o iniciar sesión para pagar.');
+    return;
+  }
+
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+  let orderNum = null;
+  if (window.Backend && window.Backend.orders && isSupabaseConfigured()) {
+    showToast('⏳ Registrando tu pedido en Supabase...');
+    const res = await Backend.orders.createOrder(cart, total);
+    if (res && res.success && res.orderNumber) {
+      orderNum = res.orderNumber;
+    }
+  }
+
+  const orderLine = orderNum ? `*Pedido Oficial #:* ${orderNum}%0A` : '';
+  const cartSummary = cart.map(item => `• ${item.name} (${item.period}) — ${formatCOP(item.price)}`).join('%0A');
+  
+  const wppMessage = `Hola StreamVault! 🛒 Acabo de realizar el pago por *Nequi*.%0A%0A${orderLine}*Cliente:* ${encodeURIComponent(currentUser.name)}%0A*Teléfono:* ${encodeURIComponent(currentUser.phone || '')}%0A*Correo:* ${encodeURIComponent(currentUser.email)}%0A%0A*Mi pedido:*%0A${cartSummary}%0A%0A*Total Pagado:* ${encodeURIComponent(formatCOP(total))}%0A%0AAdjunto el comprobante de pago 📸`;
+
+  window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${wppMessage}`, '_blank');
+  showToast(orderNum ? `🎉 ¡Pedido #${orderNum} creado! Abriendo WhatsApp...` : '🎉 Abriendo WhatsApp...');
 }
 
 // ═══════════════════════════════════════════════════════

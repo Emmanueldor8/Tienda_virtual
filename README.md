@@ -37,9 +37,36 @@ StreamVault es una plataforma web moderna, rápida y responsiva para la comercia
 ├── styles.css        # Hoja de estilos con diseño responsive y efectos glassmorphism
 ├── script.js         # Lógica interactiva, carrito, autenticación y pasarela Nequi
 ├── admin.html        # Dashboard administrativo y CRM de vencimientos
-├── terminos.html     # Términos y condiciones del servicio
-└── README.md         # Documentación del proyecto
+├── terminos.html        # Términos y condiciones del servicio
+├── supabase-client.js   # Inicializador y configuración de Supabase
+├── backend.js           # Capa de servicios backend (Auth, Catálogo, Pedidos, Pagos, CRM)
+└── README.md            # Documentación del proyecto
 ```
+
+---
+
+## 🗄️ Conexión con Supabase (PostgreSQL)
+
+1. **Configurar Credenciales:**
+   Abre el archivo [`supabase-client.js`](file:///c:/Users/Usuario/Desktop/Tienda_Virtual/supabase-client.js) y reemplaza los valores de `SUPABASE_CONFIG`:
+   ```javascript
+   const SUPABASE_CONFIG = {
+     url: 'https://xyzcompany.supabase.co', // Project URL de Supabase
+     anonKey: 'TU_SUPABASE_ANON_KEY'        // Clave pública Anon
+   };
+   ```
+
+2. **Crear las Tablas en Supabase:**
+   En tu panel de Supabase, ve al **SQL Editor** y ejecuta el script de base de datos con las tablas `perfiles`, `productos`, `planes`, `pedidos`, `pedido_detalles`, `pagos`, `suscripciones`, `gastos` y sus políticas RLS.
+
+3. **Poblar el Catálogo:**
+   Una vez conectado, abre [`admin.html`](file:///c:/Users/Usuario/Desktop/Tienda_Virtual/admin.html) y presiona el botón **"Sembrar Catálogo Supabase"**. Esto insertará automáticamente los 7 productos y sus planes en pesos colombianos (COP).
+
+4. **Asignar Rol de Administrador en Supabase:**
+   Regístrate con tu correo en la tienda y luego en el **SQL Editor** de Supabase ejecuta:
+   ```sql
+   update public.perfiles set rol = 'admin' where id = 'TU_USER_ID';
+   ```
 
 ---
 
@@ -54,7 +81,7 @@ StreamVault es una plataforma web moderna, rápida y responsiva para la comercia
 
 ---
 
-## 🔐 Credenciales del Panel de Control
+## 🔐 Credenciales por Defecto del Panel de Control
 * **Usuario:** `admin`
 * **Contraseña:** `admin123`
 *(Acceso disponible desde el botón de la barra de navegación o el formulario de inicio de sesión de la tienda).*
@@ -63,3 +90,4 @@ StreamVault es una plataforma web moderna, rápida y responsiva para la comercia
 
 ## 📄 Licencia
 Proyecto desarrollado para StreamVault Colombia. Todos los derechos reservados.
+

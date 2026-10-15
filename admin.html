@@ -11,6 +11,11 @@
   <!-- Iconos FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  
+  <!-- SDK Oficial Supabase & Capa Backend -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script src="backend.js"></script>
   <style>
     body {
       background-color: #0a0a0f;
@@ -55,6 +60,9 @@
     </div>
 
     <div class="flex items-center gap-2.5">
+      <span id="supabaseStatusBadge" class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold rounded-full bg-slate-800 text-slate-400 border border-slate-700">
+        <i class="fa-solid fa-circle text-[8px] text-amber-400"></i> Supabase
+      </span>
       <a href="index.html" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700/60 transition flex items-center gap-1.5">
         <i class="fa-solid fa-store text-indigo-400"></i>
         <span class="hidden sm:inline">Ver Tienda</span>
@@ -129,6 +137,9 @@
         </p>
       </div>
       <div class="flex flex-wrap gap-2">
+        <button onclick="seedCatalogSupabase()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 transition flex items-center gap-1.5" title="Inserta los 7 productos y planes oficiales en Supabase">
+          <i class="fa-solid fa-cloud-arrow-up text-indigo-400"></i> Sembrar Catálogo Supabase
+        </button>
         <button onclick="loadDemoData()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center gap-1.5">
           <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Cargar Datos Demo
         </button>
@@ -212,6 +223,45 @@
           <div id="barWarranty" class="bg-amber-500 h-full transition-all duration-500" style="width: 0%"></div>
           <div id="barProfit" class="bg-emerald-500 h-full transition-all duration-500" style="width: 0%"></div>
         </div>
+      </div>
+    </section>
+
+    <!-- ══════════════ BANDEJA DE PAGOS PENDIENTES (SUPABASE) ══════════════ -->
+    <section class="glass rounded-3xl p-6 border border-slate-800 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-inbox text-amber-400"></i> Pedidos & Pagos Entrantes (Supabase)
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">Órdenes generadas por clientes desde la tienda web pendientes de validación por Nequi.</p>
+        </div>
+        <button onclick="refreshPendingPayments()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition flex items-center gap-1.5 self-start sm:self-auto">
+          <i class="fa-solid fa-rotate text-indigo-400"></i> Actualizar Bandeja
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="text-slate-400 border-b border-slate-800 uppercase tracking-wider text-[11px]">
+              <th class="py-3 px-3">Pedido #</th>
+              <th class="py-3 px-3">Cliente</th>
+              <th class="py-3 px-3">WhatsApp</th>
+              <th class="py-3 px-3">Total COP</th>
+              <th class="py-3 px-3">Método</th>
+              <th class="py-3 px-3">Estado</th>
+              <th class="py-3 px-3 text-right">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="pendingPaymentsTableBody" class="divide-y divide-slate-800/60">
+            <tr>
+              <td colspan="7" class="py-6 text-center text-slate-400">
+                <i class="fa-solid fa-hourglass-start text-amber-400 text-xl block mb-2"></i>
+                Cargando pedidos desde Supabase...
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
@@ -448,7 +498,9 @@
       document.getElementById("loginView").classList.add("hidden");
       document.getElementById("adminView").classList.remove("hidden");
       document.getElementById("btnLogout").classList.remove("hidden");
+      updateSupabaseBadge();
       renderSalesTable();
+      refreshPendingPayments();
     }
 
     function togglePassVisibility() {
@@ -699,6 +751,126 @@
         document.getElementById("barCostPct").innerText = "0%";
         document.getElementById("barWarrantyPct").innerText = "0%";
         document.getElementById("barProfitPct").innerText = "0%";
+      }
+    }
+
+    // ══════════════ OPERACIONES SUPABASE EN ADMIN ══════════════
+    function updateSupabaseBadge() {
+      const badge = document.getElementById("supabaseStatusBadge");
+      if (!badge) return;
+      if (typeof isSupabaseConfigured === "function" && isSupabaseConfigured()) {
+        badge.className = "hidden sm:flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30";
+        badge.innerHTML = `<i class="fa-solid fa-circle text-[8px] text-emerald-400"></i> Supabase: Conectado`;
+      } else {
+        badge.className = "hidden sm:flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30";
+        badge.innerHTML = `<i class="fa-solid fa-circle text-[8px] text-amber-400"></i> Supabase: Pega tus claves`;
+      }
+    }
+
+    async function seedCatalogSupabase() {
+      if (typeof isSupabaseConfigured !== "function" || !isSupabaseConfigured()) {
+        alert("⚠️ Primero debes ingresar tu Project URL y Anon Key en 'supabase-client.js'.");
+        return;
+      }
+      if (!confirm("¿Deseas poblar el catálogo de Supabase con los 7 productos y sus planes en COP?")) return;
+      
+      const res = await Backend.catalog.seedInitialCatalogIfEmpty();
+      if (res && res.success) {
+        alert("✅ " + res.message);
+      } else {
+        alert("❌ Error: " + (res?.error || "No se pudo sembrar el catálogo"));
+      }
+    }
+
+    async function refreshPendingPayments() {
+      const tbody = document.getElementById("pendingPaymentsTableBody");
+      if (!tbody) return;
+
+      if (typeof isSupabaseConfigured !== "function" || !isSupabaseConfigured() || !window.supabaseClient) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-6 text-center text-slate-400">
+              <i class="fa-solid fa-circle-info text-amber-400 text-xl block mb-2"></i>
+              Modo local / Para recibir pedidos en vivo desde la base de datos, ingresa tus claves en <code>supabase-client.js</code>.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('pagos')
+          .select(`
+            id,
+            monto_cop,
+            metodo,
+            estado,
+            created_at,
+            pedidos:pedido_id (id, numero_pedido, total_cop, estado, notas_cliente),
+            perfiles:usuario_id (nombre_completo, telefono)
+          `)
+          .in('estado', ['pendiente', 'en_revision'])
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" class="py-6 text-center text-slate-400">
+                <i class="fa-solid fa-check-circle text-emerald-400 text-2xl block mb-2"></i>
+                No hay pagos pendientes de revisión en este momento. ¡Todo al día!
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = data.map(item => `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="py-3 px-3 font-bold text-white">#${item.pedidos?.numero_pedido || 'N/A'}</td>
+            <td class="py-3 px-3 font-semibold text-slate-200">${item.perfiles?.nombre_completo || 'Cliente'}</td>
+            <td class="py-3 px-3 text-slate-300">
+              <a href="https://wa.me/57${(item.perfiles?.telefono || '').replace(/\D/g, '')}" target="_blank" class="text-emerald-400 hover:underline flex items-center gap-1">
+                <i class="fa-brands fa-whatsapp"></i> ${item.perfiles?.telefono || 'Sin teléfono'}
+              </a>
+            </td>
+            <td class="py-3 px-3 font-bold text-emerald-400">${formatCOP(item.monto_cop)}</td>
+            <td class="py-3 px-3 uppercase text-[10px] text-slate-300">${item.metodo}</td>
+            <td class="py-3 px-3">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                ${item.estado}
+              </span>
+            </td>
+            <td class="py-3 px-3 text-right">
+              <button onclick="approvePayment('${item.id}', '${item.pedidos?.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow-sm flex items-center gap-1 ml-auto">
+                <i class="fa-solid fa-check"></i> Aprobar y Activar
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error("Error al obtener pagos pendientes:", err);
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-4 text-center text-rose-400 text-xs">
+              Error al consultar Supabase: ${err.message}
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    async function approvePayment(pagoId, pedidoId) {
+      if (!confirm("¿Deseas verificar este pago y activar la suscripción del cliente en Supabase?")) return;
+      const res = await Backend.admin.verifyPaymentAndActivate(pagoId, pedidoId, "Pago verificado por administrador");
+      if (res && res.success) {
+        alert("✅ ¡Pago verificado con éxito! La suscripción ha sido activada en Supabase.");
+        refreshPendingPayments();
+        renderSalesTable();
+      } else {
+        alert("❌ Error: " + (res?.error || "No se pudo verificar el pago"));
       }
     }
 
